@@ -1,0 +1,371 @@
+﻿@model P_Micro_Banking.Models.Loan.DisbursmentDetails
+
+@{ ViewData["Title"] = "Add Account";
+    Layout = "_Layout";
+}
+
+<style>
+    .label {
+        margin-top: 10px;
+        margin-right: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        color: #808080;
+    }
+
+
+
+    .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+    }
+</style>
+
+
+
+
+<div class="container">
+    <div class="row col-lg-12">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i> Disbursment
+                </div>
+                <div class="card-body">
+                    <div class="center">
+                        <div class="row col-lg-12" style="margin:5px;">
+                            <form asp-controller="Loan" onsubmit="return jQueryAjaxPostSearch(this);" enctype="multipart/form-data" method="POST" asp-action="GetCustomerNameForLoan">
+                                <div class="input-group">
+                                    <label class="label">CustomerID</label>
+                                    <input required type="text" class="form-control rounded form-control-lg" id="CustomerID" placeholder="CustomerID" asp-for="CustomerID" style="width: 300px;" /> &nbsp;&nbsp;
+
+
+                                    <input style="width: 100px; background-color: #1aa1e2; border: none; border-radius: 3px; " class="button submit-btn" type="submit" value="Search" />
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="row col-lg-12">
+                            <form asp-controller="Loan" onsubmit="return jQueryAjaxPostDisbursment(this);" enctype="multipart/form-data" method="POST" asp-action="Disbursment">
+                                <div class="row" style="margin-top:0px;">
+                                    <div class="input-group mt-4 mb-4 ">
+                                        <label class="label">Customer Name</label>
+                                        <div class="col-12 col-sm-7"> <input asp-for="CustomerName" id="CustomerName" placeholder="Customer Name" class="form-control form-control-lg" /></div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Loan Package</label>
+                                        <select asp-for="LoanCode" id="LoanPackage" class="form-control form-control-lg">
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <input asp-for="CustomerN" id="Customer" type="hidden" placeholder="Customer Name" class="form-control form-control-lg" />
+
+                                <div class="row  mt-4" style="margin-top:0px;">
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Loan Amount</label>
+                                        <input data-type="currency" id="Amount" placeholder="0.00" class="form-control form-control-lg" />
+                                        <input asp-for="LoanAmount" id="numb" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                        <input asp-for="InterestRate" id="InterestRate" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                        <input asp-for="GlAccNo" id="GlAccNo" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                        <input asp-for="IntrstGlAccNo" id="IntrstGlAccNo" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+
+                                    </div>
+                                    <input type="text" style="visibility:hidden" id="customer" asp-for="CustomerN" />
+
+                                </div>
+
+                                <div class="row  mt-4" style="margin-top:0px;">
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Loan Tenure</label>
+                                        <select asp-for="Tenor" id="LoanTenor" class="form-control form-control-lg">
+                                            <option selected value="">Select Tenor </option>
+                                            <option value="1">1 Month </option>
+                                            <option value="2">2 Months </option>
+                                            <option value="3">3 Months</option>
+                                            <option value="4">4 Months</option>
+                                            <option value="5">5 Months</option>
+                                            <option value="6">6 Months</option>
+                                            <option value="7">7 Months</option>
+                                            <option value="8">8 Months</option>
+                                            <option value="9">9 Months</option>
+                                            <option value="10">10 Months</option>
+                                            <option value="11">11 Months</option>
+                                            <option value="12">12 Months</option>
+                                            <option value="15">15 Months</option>
+                                            <option value="18">18 Months</option>
+                                            <option value="24">24 Months</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-6 ">
+                                        <label style="margin-top: -4px;" class="control-label">Total Repayment</label>
+                                        <input asp-for="PrincipalInterestAmount" id="PrincipalInterestAmount" placeholder="0.00" class="form-control form-control-lg" />
+
+                                    </div>
+
+                                    <div class="col-12 col-sm-6 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Total Interest</label>
+                                        <input asp-for="TotalInterest" id="TotalInterest" placeholder="0.00" class="form-control form-control-lg" />
+                                    </div>
+                                </div>
+                                <div class="row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-6 ">
+                                        <label style="margin-top: -4px;" class="control-label">M/W Interest Repay</label>
+                                        <input asp-for="InterestPerDuration" id="InterestPerDuration" placeholder="0.00" class="form-control form-control-lg" />
+                                    </div>
+
+                                    <div class="col-12 col-sm-6 mt-4 mt-sm-0 ">
+                                        <label class="control-label">M/W Repayment</label>
+                                        <input asp-for="PrincipalInterestAmountPerDuration" id="PrincipalInterestAmountPerDuration" placeholder="0.00" class="form-control form-control-lg" />
+                                    </div>
+                                </div>
+
+                                <div class="row  mt-5 mb-5" style="margin-top:0px;">
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Relationship Officer</label>
+                                        <select asp-for="RelationshipOfficerID" id="RelationshipOfficer" class="form-control form-control-lg">
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <input asp-for="PhoneNumber" id="PhoneNumber" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+
+                                <div class="mt-3">
+                                    <input style="width: 100px; background-color: #1aa1e2; border: none; padding: 7px 14px; border-radius: 3px; " class="button submit-btn" type="submit" value="Save" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        jQueryAjaxPostSearch = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success('Successful');
+                            console.log(res.dep);
+                            $('#CustomerName').html('');
+                            $('#PhoneNumber').html('');
+                            var names = res.dep.accountName;
+                            var id = res.dep.customerID;
+                            var PhoneNumber = res.dep.phoneNumber
+                            $('#CustomerName').val(names);
+                            console.log(id);
+                            $('#Customer').val(id);
+                            $('#PhoneNumber').val(PhoneNumber);
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error("Failed");
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+        jQueryAjaxPostDisbursment = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success(res.msg);
+
+                            $("#Amount").val('');
+                            $("#Amount").attr('placeholder', '0.00');
+                            $('#CustomerName').val('');
+                            $('#PrincipalInterestAmount').val('');
+                            $('#PrincipalInterestAmount').attr('placeholder', '0.00');
+                            $('#TotalInterest').val('');
+                            $('#TotalInterest').attr('placeholder', '0.00');
+                            $('#InterestPerDuration').val('');
+                            $('#InterestPerDuration').attr('placeholder', '0.00');
+                            $('#PrincipalInterestAmountPerDuration').val('');
+                            $('#PrincipalInterestAmountPerDuration').attr('placeholder', '0.00');
+                            
+
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error(res.msg);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+    </script>
+    <script>
+        
+        $('#LoanTenor').on("change", function () {
+            var months = $('#LoanTenor').val();
+            var amount = $('#numb').val();
+            var rate = $('#InterestRate').val();
+            
+            var interest = (amount * (rate * 0.01)) / months;
+            var PrincipalInterest = ((amount / months) + interest);
+            console.log(interest, PrincipalInterest)
+
+            var TotalPrincipalInterest = PrincipalInterest * months;
+            var TotalInterest = interest * months;
+
+            $('#PrincipalInterestAmount').val(TotalPrincipalInterest.toFixed(2));
+            $('#TotalInterest').val(TotalInterest.toFixed(2));
+            $('#InterestPerDuration').val(interest.toFixed(2));
+            $('#PrincipalInterestAmountPerDuration').val(PrincipalInterest.toFixed(2));
+          
+        });
+
+
+        $('#LoanPackage').on("change", function () {
+            var state = $('#LoanPackage').val();
+            var obj = { Sate_Name: state };
+            console.log(obj);
+            AjaxCall('/Loan/GetInterestRate', JSON.stringify(obj), 'POST').done(function (res) {
+                
+                $('#InterestRate').html('');
+                $('#GlAccNo').html('');
+                $('#IntrstGlAccNo').html('');
+                var options1 = '';
+                var options = '';
+                var options2 = '';
+                
+                options = res.code
+                options1 = res.item
+                options2 = res.item1
+
+                $('#GlAccNo').val(options1);
+                $('#InterestRate').val(options);
+                $('#IntrstGlAccNo').val(options2);
+               
+                
+            }).fail(function (error) {
+                alert(error.StatusText);
+            });
+        });
+        $(function () {
+            AjaxCall('/Customer/GetRelationshipOfficer', null).done(function (res) {
+                //   console.log(response);
+                //  var res = JSON.parse(response);
+                if (res.length > 0) {
+                    $('#RelationshipOfficer').html('');
+
+                    var options = '';
+                    options += '<option value="Select">Select</option>';
+
+                    for (var i = 0; i < res.length; i++) {
+                        // console.log(res[i].DataCode);
+                        options += '<option value="' + res[i].code + '">' + res[i].item + '</option>';
+                    }
+                    $('#RelationshipOfficer').append(options);
+
+                }
+            }).fail(function (error) {
+                alert(error.StatusText);
+            });
+        });
+
+        $(function () {
+            AjaxCall('/Loan/GetLoanPackage', null).done(function (res) {
+                //   console.log(response);
+                //  var res = JSON.parse(response);
+                if (res.length > 0) {
+                    $('#LoanPackage').html('');
+
+                    var options = '';
+                    options += '<option value="Select">Select Loan Package</option>';
+
+                    for (var i = 0; i < res.length; i++) {
+                        // console.log(res[i].DataCode);
+                        options += '<option value="' + res[i].code + '">' + res[i].item + '</option>';
+                    }
+                    $('#LoanPackage').append(options);
+
+                }
+            }).fail(function (error) {
+                alert(error.StatusText);
+            });
+        });
+
+        document.getElementById("Amount").onchange = function () {
+            var amt = parseInt(document.getElementById("Amount").value);
+            document.getElementById("numb").value = amt;
+
+        }
+
+        // Jquery Dependency
+        $("input[data-type='currency']").on({
+            blur: function () {
+                var LoanAmount = document.getElementById("numb").value;
+                document.getElementById("Amount").value = parseFloat(LoanAmount).formatMoney();
+
+                var amount = $('#numb').val();
+                var charge = $('#WithdrawerCharge').val();
+                var total = parseFloat(amount - charge).formatMoney();
+                $('#Total').val(total.toLocaleString());
+
+            }
+        });
+
+        Number.prototype.formatMoney = function (decPlaces, thouSeparator, decSeparator) {
+            var n = this,
+                decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+                decSeparator = decSeparator == undefined ? "." : decSeparator,
+                thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+                sign = n < 0 ? "-" : "",
+                i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
+        };
+    </script>
+    
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

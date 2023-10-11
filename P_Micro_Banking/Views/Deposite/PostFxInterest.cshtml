@@ -1,0 +1,344 @@
+﻿
+@model P_Micro_Banking.Models.Deposite.TransactionSearch
+
+@{ ViewData["Title"] = "Cash Deposite";
+    Layout = "_Layout";
+}
+
+<style>
+    .label {
+        margin-top: 10px;
+        margin-right: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        color: #808080;
+    }
+
+    .card1 {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        /* border: 1px solid #c8ced3; */
+        border-radius: 0.25rem;
+    }
+
+    .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+    }
+
+    .pointer {
+        pointer-events: none;
+    }
+</style>
+
+
+
+
+<div class="container">
+    <div class="row col-lg-12">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i> Cash Deposite
+                </div>
+                <div class="card-body">
+                    <div class="center">
+                        <div class="row col-lg-12" style="margin:5px;">
+                            <form asp-controller="Deposite" onsubmit="return jQueryAjaxGetAccountDeposit(this);" enctype="multipart/form-data" method="POST" asp-action="FixedAccTransName">
+                                <div class="input-group">
+                                    <label class="label">Account Number</label>
+                                    <input required type="text" class="form-control rounded form-control-lg" id="AccountNumber" placeholder="Account Number" asp-for="AccountNumber" style="width: 300px;" /> &nbsp;&nbsp;
+
+
+                                    <input style="width: 100px; background-color: #1aa1e2; border: none; border-radius: 3px; " class="button submit-btn" type="submit" value="Search" />
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class=" col-lg-12">
+                            <form asp-controller="Deposite" onsubmit="return jQueryAjaxPostFixedDepositInterest(this);" enctype="multipart/form-data" method="POST" asp-action="PostFxInterest">
+                                <div class="row" style="margin-top:0px;">
+                                    <div class="input-group mt-4 mb-4 ">
+                                        <label class="label">Account Name</label>
+                                        <div class="col-12 col-sm-7"> <input asp-for="AccountHolderName" id="AccountHolderName" placeholder="Account Name" class="form-control form-control-lg" /></div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 " asp-for="Amount">Fixed Amount</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg pointer" data-type="currency" asp-for="Amount" id="Amount" type="text" placeholder="0.00">
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 " asp-for="PrewithCharge">Charge Amount</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg pointer" asp-for="PrewithCharge" id="PrewithCharge" type="text" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 " asp-for="AccumulatedNoMonth">Acm No Months</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg pointer" id="AccumulatedNoMonth" asp-for="AccumulatedNoMonth" type="text" placeholder="No. of Month">
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 " asp-for="StartDate">StartDate</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg pointer" id="StartDate" asp-for="StartDate" type="text" placeholder="dd/mm/yyyy">
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 " asp-for="AcctualNoMonth">AcctualNo Month</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg pointer" id="AcctualNoMonth" asp-for="AcctualNoMonth" type="text" placeholder="No. of Month">
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 " asp-for="Maturitydate">Maturity Date</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg pointer" id="Maturitydate" asp-for="Maturitydate" type="text" placeholder="dd/mm/yyyy">
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 " asp-for="Interest">Interest Amount</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg pointer" id="Interest" asp-for="Interest" type="text" placeholder="0.00">
+                                    </div>
+                                </div>
+
+
+                                <div class="row  mt-2">
+                                    <label class="col-sm-3 ">Currency</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control form-control-lg pointer">
+                                            <option selected value="1">NGN</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 " asp-for="Total">Total</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg pointer" id="Total" asp-for="Total" type="text" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="row  mt-2">
+                                    <label class="col-sm-3 ">Naration</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg pointer" asp-for="Naration" id="Naration" type="text" value="113-Fix Deposit Interest" placeholder="Naration">
+                                    </div>
+                                </div>
+
+
+
+                                <input asp-for="AccountCode" id="AccountCode" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                <input asp-for="AccountName" id="AccountName" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                <input asp-for="GLAccount" id="GlAccNo" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+
+                                <input asp-for="AccountNumber1" id="AccountNumber1" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                <input asp-for="PhoneNumber" id="PhoneNumber" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+
+
+
+                                <div class="mt-3">
+                                    <input style="width: 100px; background-color: #1aa1e2; border: none; padding: 7px 14px; border-radius: 3px; " class="button submit-btn" type="submit" value="Post" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        jQueryAjaxGetAccountDeposit = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success('Successful');
+                            console.log(res.dep);
+                            $('#AccountHolderName').html('');
+                            $('#PrewithCharge').html('');
+                            $('#AccountCode').html('');
+                            $('#GlAccNo').html('');
+                            $('#AccountNumber1').html('');
+                            $('#PhoneNumber').html('');
+                            $('#Amount').html('');
+                            $('#AccumulatedNoMonth').html('');
+                            $('#StartDate').html('');
+                            $('#AcctualNoMonth').html('');
+                            $('#Maturitydate').html('');
+                            $('#Interest').html('');
+                            $('#Total').html('');
+
+                            var AccountHolderName = res.dep.accountHolderName;
+                            var PrewithCharge = res.dep.prewithCharge;
+                            var AccountCode = res.dep.accountCode;
+                            var GLAccount = res.dep.glAccount;
+                            var AccountNumber1 = res.dep.accountNumber1;
+                            var PhoneNumber = res.dep.phoneNumber
+                            var Amount = res.dep.amount;
+                            var AccumulatedNoMonth = res.dep.accumulatedNoMonth;
+                            var StartDate = res.dep.startDate;
+                            var AcctualNoMonth = res.dep.acctualNoMonth;
+                            var Maturitydate = res.dep.maturitydate;
+                            var Interest = res.dep.interest
+                            var Total = res.dep.total
+
+                            $('#AccountHolderName').val(AccountHolderName);
+                            $('#PrewithCharge').val(PrewithCharge);
+                            $('#AccountCode').val(AccountCode);
+                            $('#GlAccNo').val(GLAccount);
+                            $('#AccountNumber1').val(AccountNumber1);
+                            $('#PhoneNumber').val(PhoneNumber);
+                            $('#Amount').val(Amount);
+                            $('#AccumulatedNoMonth').val(AccumulatedNoMonth);
+                            $('#StartDate').val(StartDate);
+                            $('#AcctualNoMonth').val(AcctualNoMonth);
+                            $('#Maturitydate').val(Maturitydate);
+                            $('#Interest').val(Interest);
+                            $('#Total').val(Total);
+
+                            //$("#Amount").prop("disabled", false);
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error("Failed");
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+        jQueryAjaxPostFixedDepositInterest = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success(res.msg);
+
+                            $("#Amount").val('');
+                            $("#Amount").attr('placeholder', '0.00');
+                            $('#AccountHolderName').val('');
+                            $('#AccountHolderName').attr('placeholder', 'Account Holder Name');
+                            $('#PrewithCharge').val('');
+                            $('#PrewithCharge').attr('placeholder', '0.00');
+                            $('#AccumulatedNoMonth').val('');
+                            $('#AccumulatedNoMonth').attr('placeholder', 'Acm No. Month');
+                            $('#StartDate').val('');
+                            $('#StartDate').attr('placeholder', 'dd/mm/yyyy');
+                            $('#AcctualNoMonth').val('');
+                            $('#AcctualNoMonth').attr('placeholder', 'Actuat No. Month');
+                            $('#Maturitydate').val('');
+                            $('#Maturitydate').attr('placeholder', 'dd/mm/yyyy');
+                            $('#Interest').val('');
+                            $('#Interest').attr('placeholder', '0.00');
+                            $('#Total').val('');
+                            $('#Total').attr('placeholder', '0.00');
+
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error(res.msg);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+    </script>
+    <script>
+        $('#CustomerID').blur(function () {
+            var id = $('#CustomerID').val();
+            console.log(id);
+            $('#customer').val(id);
+        });
+
+        document.getElementById("Amount").onchange = function () {
+            var amt = parseInt(document.getElementById("Amount").value);
+            document.getElementById("numb").value = amt;
+
+        }
+
+        // Jquery Dependency
+        $("input[data-type='currency']").on({
+            blur: function () {
+                var LoanAmount = document.getElementById("numb").value;
+                document.getElementById("Amount").value = parseFloat(LoanAmount).formatMoney();
+
+                var amount = $('#numb').val();
+                var charge = $('#DepositeCharge').val();
+                var total = parseFloat(amount - charge).formatMoney() ;
+                $('#Total').val(total.toLocaleString());
+
+            }
+        });
+
+        Number.prototype.formatMoney = function (decPlaces, thouSeparator, decSeparator) {
+            var n = this,
+                decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+                decSeparator = decSeparator == undefined ? "." : decSeparator,
+                thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+                sign = n < 0 ? "-" : "",
+                i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
+        };
+
+
+    </script>
+
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+

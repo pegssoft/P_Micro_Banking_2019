@@ -1,0 +1,759 @@
+﻿@model P_Micro_Banking.Models.Customer.CustomerOnboarding
+@{ ViewData["Title"] = "Customer Onboarding";
+    Layout = "_Layout"; }
+
+<style>
+    h1 {
+        text-align: center;
+    }
+
+    h2 {
+        margin: 0;
+    }
+
+    #multi-step-form-container {
+        margin-top: 5rem;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .mx-auto {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .pl-0 {
+        padding-left: 0;
+    }
+
+    .button {
+        padding: 0.7rem 1.5rem;
+        border: 1px solid #1d9bc6;
+        background-color: #1d9bc6;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .submit-btn {
+        border: 1px solid #1d9bc6;
+        background-color: #1d9bc6;
+    }
+
+    .mt-3 {
+        margin-top: 2rem;
+    }
+
+    .d-none {
+        display: none;
+    }
+
+    .form-step {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        padding: 3rem;
+    }
+
+    .font-normal {
+        font-weight: normal;
+    }
+
+    ul.form-stepper {
+        counter-reset: section;
+        margin-bottom: 3rem;
+    }
+
+        ul.form-stepper .form-stepper-circle {
+            position: relative;
+        }
+
+            ul.form-stepper .form-stepper-circle span {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translateY(-50%) translateX(-50%);
+            }
+
+    .form-stepper-horizontal {
+        position: relative;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+    }
+
+    ul.form-stepper > li:not(:last-of-type) {
+        margin-bottom: 0.625rem;
+        -webkit-transition: margin-bottom 0.4s;
+        -o-transition: margin-bottom 0.4s;
+        transition: margin-bottom 0.4s;
+    }
+
+    .form-stepper-horizontal > li:not(:last-of-type) {
+        margin-bottom: 0 !important;
+    }
+
+    .form-stepper-horizontal li {
+        position: relative;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        -webkit-box-align: start;
+        -ms-flex-align: start;
+        align-items: start;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+    }
+
+        .form-stepper-horizontal li:not(:last-child):after {
+            position: relative;
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            height: 1px;
+            content: "";
+            top: 32%;
+        }
+
+        .form-stepper-horizontal li:after {
+            background-color: #1d9bc6;
+        }
+
+        .form-stepper-horizontal li.form-stepper-completed:after {
+            background-color: #1d9bc6;
+        }
+
+        .form-stepper-horizontal li:last-child {
+            flex: unset;
+        }
+
+    ul.form-stepper li a .form-stepper-circle {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        margin-right: 0;
+        line-height: 1.7rem;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.38);
+        border-radius: 50%;
+    }
+
+    .form-stepper .form-stepper-active .form-stepper-circle {
+        background-color: #1d9bc6 !important;
+        color: #fff;
+    }
+
+    .form-stepper .form-stepper-active .label {
+        color: #1d9bc6 !important;
+    }
+
+    .form-stepper .form-stepper-active .form-stepper-circle:hover {
+        background-color: #1d9bc6 !important;
+        color: #fff !important;
+    }
+
+    .form-stepper .form-stepper-unfinished .form-stepper-circle {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .form-stepper .form-stepper-completed .form-stepper-circle {
+        background-color: #1d9bc6 !important;
+        color: #fff;
+    }
+
+    .form-stepper .form-stepper-completed .label {
+        color: #1d9bc6 !important;
+    }
+
+    .form-stepper .form-stepper-completed .form-stepper-circle:hover {
+        background-color: #1d9bc6 !important;
+        color: #fff !important;
+    }
+
+    .form-stepper .form-stepper-active span.text-muted {
+        color: #fff !important;
+    }
+
+    .form-stepper .form-stepper-completed span.text-muted {
+        color: #fff !important;
+    }
+
+    .form-stepper .label {
+        font-size: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .form-stepper a {
+        cursor: default;
+    }
+    h3 {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1d9bc6;
+        font-size: 18px;
+        padding: 2px 5px 5px 5px;
+    }
+ 
+</style>
+
+<div class="container rounded  mt-5 mb-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="DivReload" class="card">
+                <div class="card-body">
+                    <div id="multi-step-form-container">
+                        <!-- Form Steps / Progress Bar -->
+                        <ul class="form-stepper form-stepper-horizontal text-center mx-auto pl-0">
+                            <!-- Step 1 -->
+                            <li class="form-stepper-active text-center form-stepper-list" step="1">
+                                <a class="mx-2">
+                                    <span class="form-stepper-circle">
+                                        <span>1</span>
+                                    </span>
+                                    <div class="label">Personal Details</div>
+                                </a>
+                            </li>
+                            <!-- Step 2 -->
+                            <li class="form-stepper-unfinished text-center form-stepper-list" step="2">
+                                <a class="mx-2">
+                                    <span class="form-stepper-circle text-muted">
+                                        <span>2</span>
+                                    </span>
+                                    <div class="label text-muted">Bank Details</div>
+                                </a>
+                            </li>
+                            <!-- Step 3 -->
+                            <li class="form-stepper-unfinished text-center form-stepper-list" step="3">
+                                <a class="mx-2">
+                                    <span class="form-stepper-circle text-muted">
+                                        <span>3</span>
+                                    </span>
+                                    <div class="label text-muted">Account Details</div>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- Step Wise Form Content -->
+                        <form asp-action="Onboarding" onsubmit="return jQueryAjaxPost(this);" enctype="multipart/form-data" method="POST">
+                            <!-- Step 1 Content -->
+                            <section id="step-1" class="form-step">
+                                <h3>Personal Information</h3>
+                                <div class="form-row " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-4 ">
+                                        <label class="control-label">First Name</label>
+                                        <input asp-for="FirstName" id="FirstName" placeholder="First Name" class="form-control form-control-lg" />
+                                    </div>
+                                    <div class="col-12 col-sm-4 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Middle Name</label>
+                                        <input asp-for="MiddleName" id="MiddleName" placeholder="Middle Name" class="form-control form-control-lg" />
+                                    </div>
+                                    <div class="col-12 col-sm-4 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Last Name</label>
+                                        <input asp-for="LastName" id="LastName" placeholder="Last Name" class="form-control form-control-lg" />
+                                    </div>
+                                </div>
+                                <div class="form-row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-6 ">
+                                        <label class="control-label">Gender</label>
+                                        <select asp-for="Gender" class="form-control form-control-lg">
+                                            <option selected value="1">Male</option>
+                                            <option value="2">Female</option>
+
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <label class="control-label">Date of Birth</label>
+                                        <input asp-for="DOB" placeholder="Date of Birth" type="date" class="form-control form-control-lg" />
+                                    </div>
+                                </div>
+                                <div class="form-row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-6 ">
+                                        <label style="margin-top: -4px;" class="control-label">Marital Status</label>
+                                        <select asp-for="MaritalStatus" class="form-control form-control-lg">
+                                            <option selected value="1">Married</option>
+                                            <option value="2">Single</option>
+                                            <option value="3">Divorced</option>
+                                            <option value="4">Widowed</option>
+
+
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Title</label>
+                                        <select asp-for="Title" class="form-control form-control-lg">
+                                            <option selected value="1">Mr</option>
+                                            <option value="2">Mrs</option>
+                                            <option value="7">Master</option>
+                                            <option value="9">Miss</option>
+                                            <option value="10">Alhaji</option>
+                                            <option value="11">Alhaji</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-6 ">
+                                        <label style="margin-top: -4px;" class="control-label">Email</label>
+                                        <input asp-for="Email" id="Email" placeholder="Email" class="form-control form-control-lg" />
+                                    </div>
+
+                                    <div class="col-12 col-sm-6 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Phone Number</label>
+                                        <input asp-for="PhoneNumber" id="PhoneNumber" placeholder="Phone Number" class="form-control form-control-lg" />
+                                    </div>
+                                </div>
+                                <div class="form-row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-4 ">
+                                        <label style="margin-top: -4px;" class="control-label">Country</label>
+                                        <select asp-for="Country" class="form-control form-control-lg">
+                                            <option value="1">Nigeria</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 mt-4 mt-sm-0 ">
+                                        <label class="control-label">State</label>
+                                        <select asp-for="State" id="State" class="form-control form-control-lg">
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 mt-4 mt-sm-0 ">
+                                        <label class="control-label">City</label>
+                                        <select asp-for="City" id="City" class="form-control form-control-lg">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Address Line 1</label>
+                                        <input asp-for="AddressLine1" id="AddressLine1" placeholder="Address Line 1" class="form-control form-control-lg" />
+                                    </div>
+
+                                </div>
+                                <div class="form-row mt-4 mb-5 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Address Line 2</label>
+                                        <input asp-for="AddressLine2" id="AddressLine2" placeholder="Address Line 2" class="form-control form-control-lg" />
+                                    </div>
+
+                                </div>
+                                <h3>Beneficiary Information</h3>
+                                <div class="form-row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-6 ">
+                                        <label style="margin-top: -4px;" class="control-label">First Name</label>
+                                        <input asp-for="NFirstName" id="NFirstName" placeholder="First Name" class="form-control form-control-lg" />
+                                    </div>
+
+                                    <div class="col-12 col-sm-6 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Last Name</label>
+                                        <input asp-for="NLastName" id="NLastName" placeholder="Last Name" class="form-control form-control-lg" />
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-4 ">
+                                        <label style="margin-top: -4px;" class="control-label">Email</label>
+                                        <input asp-for="NEmail" id="NEmail" placeholder="Email" class="form-control form-control-lg" />
+                                    </div>
+
+                                    <div class="col-12 col-sm-4 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Phone Number</label>
+                                        <input asp-for="NPhoneNumber" placeholder="Phone Number" class="form-control form-control-lg" />
+                                    </div>
+                                    <div class="col-12 col-sm-4 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Relationship</label>
+                                        <select asp-for="Relationship" placeholder="Relationship" required="" class="form-control form-control-lg">
+                                            <option value="0" disabled selected="selected">Relationship...</option>
+                                            <option value="1">Father</option>
+                                            <option value="2">Mother</option>
+                                            <option value="3">Uncle</option>
+                                            <option value="4">Aunt</option>
+                                            <option value="5">Brother</option>
+                                            <option value="6">Sister</option>
+                                            <option value="7">Child</option>
+                                            <option value="8">Friend</option>
+                                            <option value="9">Religion-related</option>
+                                            <option value="10">Work-related</option>
+                                            <option value="11">Wife</option>
+                                            <option value="12">Husband</option>
+                                            <option value="13">Partner</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Address Line 1</label>
+                                        <input asp-for="NAddressLine" id="NAddressLine" placeholder="Address Line " class="form-control form-control-lg" />
+                                    </div>
+
+                                </div>
+                                <div class="mt-5">
+                                    <button class="button btn-navigate-form-step" type="button" step_number="2">Next</button>
+                                </div>
+                            </section>
+                            <!-- Step 2 Content, default hidden on page load. -->
+                            <section id="step-2" class="form-step d-none">
+                                <h3 class="">Bank Information</h3>
+                                <!-- Step 2 input fields -->
+                                <div class="form-row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-6 ">
+                                        <label class="control-label">Identification Type</label>
+                                        <select asp-for="IdentificationType" class="form-control form-control-lg">
+                                            <option selected value="1">BVN</option>
+                                            <option value="2">NIN</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6 ">
+                                        <label class="control-label">Identification Number</label>
+                                        <input asp-for="IdentificationNumber" id="IdentificationNumber" placeholder="Identification Number" class="form-control form-control-lg" />
+                                    </div>
+                                </div>
+                                <div class="form-row mt-4" style="margin-top:0px;">
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Relationship Officer</label>
+                                        <select asp-for="RelationshipOfficer" id="RelationshipOfficer" class="form-control form-control-lg">
+                                           
+                                        </select>
+                                    </div>
+
+                                </div>
+                                
+
+                                <div class="mt-5">
+                                    <button class="button btn-navigate-form-step" type="button" step_number="1">Prev</button>
+                                    <button class="button btn-navigate-form-step" type="button" step_number="3">Next</button>
+                                </div>
+                            </section>
+                            <!-- Step 3 Content, default hidden on page load. -->
+                            <section id="step-3" class="form-step d-none">
+                                <h3 class="font-normal">Account Information</h3>
+                                <!-- Step 3 input fields -->
+                                <div class="form-row" style="margin-top:0px;">
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Package Class</label>
+                                        <select asp-for="PackageClass" id="PackageClass" class="form-control form-control-lg">
+                                            <option  selected value="0">Select Package Class</option>
+                                            <option value="1">General Savings Package</option>
+                                            <option value="2">Chrismas Saving Package</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="form-row  mt-4" style="margin-top:0px;">
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Package Type</label>
+                                        <select asp-for="PackageType" id="PackageType" class="form-control form-control-lg">
+                                        </select>
+                                    </div>
+
+                                </div>
+                                
+                                <div class="form-row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-6 ">
+                                        <label style="margin-top: -4px;" class="control-label">Interest Rate</label>
+                                        <input asp-for="InterestRate" id="Interest" placeholder="Interest Rate" class="form-control form-control-lg" />
+                                    </div>
+                                    <input asp-for="AccountCode" id="AccountCode" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                    <input asp-for="AccountName" id="AccountName" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                    <input asp-for="GlAccNo" id="GlAccNo" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+
+                                    <div class="col-12 col-sm-6 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Deposit Charge Rate</label>
+                                        <input asp-for="DepositCharge" id="Deposit" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                    </div>
+                                </div>
+                                <div class="form-row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-4 ">
+                                        <label style="margin-top: -4px;" class="control-label">Withdrawer Charge Rate</label>
+                                        <input asp-for="WithdrawerCharge" id="Withdrawer" placeholder="Withdrawer Charge Rate" class="form-control form-control-lg" />
+                                    </div>
+
+                                    <div class="col-12 col-sm-4 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Duration</label>
+                                        <input asp-for="Duration" id="Durations" placeholder="Duration" class="form-control form-control-lg" />
+                                    </div>
+                                    <div class="col-12 col-sm-4 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Opening Charge</label>
+                                        <input asp-for="OpeningCharge" id="OpeningCharge" placeholder="Duration" class="form-control form-control-lg" />
+                                    </div>
+                                </div>
+
+                                <div class="mt-5">
+                                    <button class="button btn-navigate-form-step" type="button" step_number="2">Prev</button>
+                                    <input class="button submit-btn" type="submit" value="Save" />
+                                </div>
+                            </section>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+<script>
+    const navigateToFormStep = (stepNumber) => {
+        /**
+         * Hide all form steps.
+         */
+        document.querySelectorAll(".form-step").forEach((formStepElement) => {
+            formStepElement.classList.add("d-none");
+        });
+        /**
+         * Mark all form steps as unfinished.
+         */
+        document.querySelectorAll(".form-stepper-list").forEach((formStepHeader) => {
+            formStepHeader.classList.add("form-stepper-unfinished");
+            formStepHeader.classList.remove("form-stepper-active", "form-stepper-completed");
+        });
+        /**
+         * Show the current form step (as passed to the function).
+         */
+        document.querySelector("#step-" + stepNumber).classList.remove("d-none");
+        /**
+         * Select the form step circle (progress bar).
+         */
+        const formStepCircle = document.querySelector('li[step="' + stepNumber + '"]');
+        /**
+         * Mark the current form step as active.
+         */
+        formStepCircle.classList.remove("form-stepper-unfinished", "form-stepper-completed");
+        formStepCircle.classList.add("form-stepper-active");
+        /**
+         * Loop through each form step circles.
+         * This loop will continue up to the current step number.
+         * Example: If the current step is 3,
+         * then the loop will perform operations for step 1 and 2.
+         */
+        for (let index = 0; index < stepNumber; index++) {
+            /**
+             * Select the form step circle (progress bar).
+             */
+            const formStepCircle = document.querySelector('li[step="' + index + '"]');
+            /**
+             * Check if the element exist. If yes, then proceed.
+             */
+            if (formStepCircle) {
+                /**
+                 * Mark the form step as completed.
+                 */
+                formStepCircle.classList.remove("form-stepper-unfinished", "form-stepper-active");
+                formStepCircle.classList.add("form-stepper-completed");
+            }
+        }
+    };
+    /**
+     * Select all form navigation buttons, and loop through them.
+     */
+    document.querySelectorAll(".btn-navigate-form-step").forEach((formNavigationBtn) => {
+        /**
+         * Add a click event listener to the button.
+         */
+        formNavigationBtn.addEventListener("click", () => {
+            /**
+             * Get the value of the step.
+             */
+            const stepNumber = parseInt(formNavigationBtn.getAttribute("step_number"));
+            /**
+             * Call the function to navigate to the target form step.
+             */
+            navigateToFormStep(stepNumber);
+        });
+    });
+
+</script>
+<script>
+    jQueryAjaxPost = form => {
+        displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success(res.message);
+
+                            $('#FirstName').val('');
+                            $('#MiddleName').val('');
+                            $('#LastName').val('');
+                            $('#DOB').val('');
+                            $('#Email').val('');
+                            $('#PhoneNumber').val('')
+                            $('#AddressLine1').val('')
+                            $('#AddressLine2').val('')
+                            $('#NFirstName').val('')
+                            $('#NLastName').val('')
+                            $('#NEmail').val('')
+                            $('#NPhoneNumber').val('')
+                            $('#NAddressLine').val('')
+                            $('#IdentificationNumber').val('')
+                            $('#Interest').val('')
+                            $('#Deposit').val('')
+                            $('#Withdrawer').val('')
+                            $('#Durations').val('')
+                            $("#DivReload").load(window.location.href + " #DivReload");
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error(res.message);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+
+
+    $('#PackageType').on("change", function () {
+        var state = $('#PackageType').val();
+        var obj = { Sate_Name: state };
+        console.log(obj);
+        AjaxCall('/Customer/GetDepositePackageItem', JSON.stringify(obj), 'POST').done(function (response) {
+
+                //$('#PackageType').html('');
+                var options1 = '';
+                var options2 = '';
+                var options3 = '';
+            var options4 = '';
+            var options5 = '';
+            var options6 = '';
+            var options7 = '';
+            var options8 = '';
+
+                //for (var i = 0; i < response.length; i++) {
+                    console.log(response)
+                    options1 = response.item1;
+                    options2 = response.item2;
+                    options3 = response.item3;
+            options4 = response.item4;
+            options5 = response.item5;
+            options6 = response.item6;
+            options7 = response.item7;
+            options8 = response.item8;
+               // }
+
+
+                $('#Interest').val(options1);
+                $('#Deposit').val(options2);
+                $('#Withdrawer').val(options3);
+            $('#Durations').val(options4 + ' ' + 'Days');
+            $('#AccountCode').val(options5);
+            $('#AccountName').val(options6);
+            $('#GlAccNo').val(options7);
+            $('#OpeningCharge').val(options8);
+
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+    });
+    $('#PackageClass').on("change", function () {
+        var state = $('#PackageClass').val();
+        var obj = { Sate_Name: state };
+        console.log(obj);
+        AjaxCall('/Customer/GetDepositePackage', JSON.stringify(obj), 'POST').done(function (res) {
+            if (res.length > 0) {
+                $('#PackageType').html('');
+                var options = '';
+                options += '<option value="Select">Select</option>';
+                for (var i = 0; i < res.length; i++) {
+                    options += '<option value="' + res[i].code + '">' + res[i].item + '</option>';
+                }
+                $('#PackageType').append(options);
+            }
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+    });
+    $(function () {
+        AjaxCall('/Customer/GetRelationshipOfficer', null).done(function (res) {
+            //   console.log(response);
+            //  var res = JSON.parse(response);
+            if (res.length > 0) {
+                $('#RelationshipOfficer').html('');
+
+                var options = '';
+                options += '<option value="Select">Select</option>';
+
+                for (var i = 0; i < res.length; i++) {
+                    // console.log(res[i].DataCode);
+                    options += '<option value="' + res[i].code + '">' + res[i].item + '</option>';
+                }
+                $('#RelationshipOfficer').append(options);
+
+            }
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+    });
+    $('#State').on("change", function () {
+        var state = $('#State').val();
+        var obj = { Sate_Name: state };
+        console.log(obj);
+        AjaxCall('/Customer/GetCity', JSON.stringify(obj), 'POST').done(function (res) {
+            if (res.length > 0) {
+                $('#City').html('');
+                var options = '';
+                options += '<option value="Select">Select</option>';
+                for (var i = 0; i < res.length; i++) {
+                    options += '<option value="' + res[i].code + '">' + res[i].item + '</option>';
+                }
+                $('#City').append(options);
+            }
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+    });
+    $(function () {
+        AjaxCall('/Customer/GetState', null).done(function (res) {
+            //   console.log(response);
+            //  var res = JSON.parse(response);
+            if (res.length > 0) {
+                $('#State').html('');
+
+                var options = '';
+                options += '<option value="Select">Select</option>';
+
+                for (var i = 0; i < res.length; i++) {
+                    // console.log(res[i].DataCode);
+                    options += '<option value="' + res[i].code + '">' + res[i].item + '</option>';
+                }
+                $('#State').append(options);
+
+            }
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+    });
+    function AjaxCall(url, data, type) {
+        return $.ajax({
+            url: url,
+            data: data,
+            dataType: 'json',
+            type: type ? type : 'GET',
+            contentType: "application/json; charset=utf-8"
+        });
+    }
+</script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

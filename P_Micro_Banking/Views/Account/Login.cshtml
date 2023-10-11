@@ -1,0 +1,52 @@
+﻿@model P_Micro_Banking.Models.AccountViewModel.LoginViewModel
+
+@{ ViewData["Title"] = "Login";
+    Layout = "_LayoutFullScreen";
+}
+
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card-group">
+                    <div class="card p-4">
+                        <div class="card-body">
+                            <form asp-action="login" onsubmit="return jQueryAjaxPost(this);" enctype="multipart/form-data" method="post">
+                                <h1>Login</h1>
+                                <p class="text-muted">Sign In to your account</p>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="icon-user"></i>
+                                        </span>
+                                    </div>
+                                    <input asp-for="UserName" style="text-transform: uppercase;" class="form-control" type="text" placeholder="Username">
+                                </div>
+                                <div class="input-group mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="icon-lock"></i>
+                                        </span>
+                                    </div>
+                                    <input asp-for="Password" class="form-control" type="password" placeholder="Password">
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input class="btn px-4" style="background-color: #1d9bc6;" type="submit" value="Login" />
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <a class="btn btn-link px-0">Forgot password?</a>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

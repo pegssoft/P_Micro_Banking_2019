@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewData["Title"] - P_Micro_Banking</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <!-- VENDOR CSS -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/toastr.css" rel="stylesheet" />
+    <!-- Icons-->
+    <link href="~/lib/pace-progress/css/pace.css" rel="stylesheet" />
+    <!-- MAIN CSS -->
+    <link href="~/lib/coreui/css/style.css" rel="stylesheet" />
+    <!-- VENDOR CSS -->
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/lib/flag-icon-css/css/flag-icon.css" rel="stylesheet" />
+    <link href="~/lib/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" />
+    <!-- MAIN CSS -->
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+
+
+    @RenderSection("Headers", required: false)
+
+    <!-- ICONS -->
+    <link rel="icon" type="image/x-icon" sizes="96x96" href="/favicon.ico">
+</head>
+
+<!-- BODY -->
+<body class="app flex-row align-items-center">
+    <partial name="_BusyIndicatorPartial" />
+    <div class="container">
+        <div class="row justify-content-center">
+            @RenderBody()
+        </div>
+    </div>
+    <div class="loading">
+        Loading&#8230;
+    </div>
+
+    
+        <!-- CoreUI and necessary plugins-->
+        <script src="~/lib/pace-progress/js/pace.min.js"></script>
+
+        @*<script src="~/lib/perfect-scrollbar/dist/perfect-scrollbar.js"></script>*@
+        @*<script src="~/lib/coreui/dist/js/coreui.js"></script>*@
+        <!-- Plugins and scripts required by this view-->
+        @*<script src="~/lib/chart.js/dist/Chart.js"></script>
+        <script src="~/lib/coreui/js/custom-tooltips.js"></script>
+        <script src="~/lib/coreui/js/main.js"></script>*@
+   
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!-- CoreUI and necessary plugins-->
+        <script src="~/js/site.js"  asp-append-version="true"></script>
+        <script src="~/lib/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
+        <!-- Plugins and scripts required by this view-->
+        @*<script src="~/lib/chart.js/dist/Chart.min.js"></script>
+            <script src="~/lib/coreui/js/custom-tooltips.js"></script>
+            <script src="~/lib/coreui/js/main.js"></script>*@
+    <script src="~/js/toastr.js"></script>
+   
+    <script>
+        jQueryAjaxPost = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success(res.message);
+                            window.location.href = '@Url.Action("Index", "Home")';
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error(res.message);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+
+        jQueryAjaxPostRegister = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success(res.message);
+                            window.location.href = '@Url.Action("login", "Account")';
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error(res.message);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+
+        function displayBusyIndicator() {
+            $('.loading').show();
+        }
+        function displayBusyIndicatorstop() {
+            $('.loading').hide();
+        }
+
+
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "rtl": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": 300,
+            "hideDuration": 1000,
+            "timeOut": 5000,
+            "extendedTimeOut": 1000,
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+        
+        $(function () {
+            AjaxCall('/Account/GetURoles', null).done(function (response) {
+                if (response.length > 0) {
+                    console.log(response)
+                    $('#Role').html('');
+                    var options = '';
+                    options += '<option value="Select">Select User Role</option>';
+                    for (var i = 0; i < response.length; i++) {
+                        options += '<option value="' + response[i].code + '">' + response[i].item + '</option>';
+                    }
+                    $('#Role').append(options);
+
+                }
+            }).fail(function (error) {
+                alert(error.StatusText);
+            });
+        });
+
+        $(function () {
+            AjaxCall('/Account/GetBranches', null).done(function (response) {
+                if (response.length > 0) {
+                    console.log(response)
+                    $('#Branch').html('');
+                    var options = '';
+                    options += '<option value="Select">Select Branch</option>';
+                    for (var i = 0; i < response.length; i++) {
+                        options += '<option value="' + response[i].code + '">' + response[i].item + '</option>';
+                    }
+                    $('#Branch').append(options);
+
+                }
+            }).fail(function (error) {
+                alert(error.StatusText);
+            });
+        });
+
+
+        function AjaxCall(url, data, type) {
+            return $.ajax({
+                url: url,
+                data: data,
+                dataType: 'json',
+                type: type ? type : 'GET',
+                contentType: "application/json; charset=utf-8"
+            });
+        }
+
+    </script>
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

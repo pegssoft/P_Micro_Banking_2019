@@ -1,0 +1,306 @@
+﻿@model P_Micro_Banking.Models.Deposite.NewAccount
+
+@{ ViewData["Title"] = "Add Account";
+    Layout = "_Layout1";
+}
+
+<style>
+    .label {
+        margin-top: 10px;
+        margin-right: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        color: #808080;
+    }
+
+    .card1 {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        /* border: 1px solid #c8ced3; */
+        border-radius: 0.25rem;
+    }
+
+    .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+    }
+</style>
+
+
+
+
+<div class="container">
+    <div class="row col-lg-12">
+        <div class="col-lg-12">
+            <div class="card1">
+
+                <div class="card-body">
+                    <div class="center">
+                        <div class="row col-lg-12" style="margin:5px;">
+                            <form asp-controller="Deposite" onsubmit="return jQueryAjaxPostSearch(this);" enctype="multipart/form-data" method="POST" asp-action="SingleCustomerName">
+                                <div class="input-group">
+                                    <label class="label">CustomerID</label>
+                                    <input required type="text" class="form-control rounded form-control-lg" id="CustomerID" placeholder="CustomerID" asp-for="CustomerID" style="width: 300px;" /> &nbsp;&nbsp;
+
+
+                                    <input style="width: 100px; background-color: #1aa1e2; border: none; border-radius: 3px; " class="button submit-btn" type="submit" value="Search" />
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="row col-lg-12">
+                            <form asp-controller="Deposite" onsubmit="return jQueryAjaxPostAddAcc(this);" enctype="multipart/form-data" method="POST" asp-action="AddAccount">
+                                <div class="row" style="margin-top:0px;">
+                                    <div class="input-group mt-4 mb-4 ">
+                                        <label class="label">Customer Name</label>
+                                        <div class="col-12 col-sm-7"> <input asp-for="CustomerName" id="CustomerName" placeholder="Customer Name" class="form-control form-control-lg" /></div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Package Class</label>
+                                        <select asp-for="PackageClass" id="PackageClass" class="form-control form-control-lg">
+                                            <option selected value="0">Select Package Class</option>
+                                            <option value="1">General Savings Package</option>
+                                            <option value="2">Chrismas Saving Package</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="row  mt-4" style="margin-top:0px;">
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Package Type</label>
+                                        <select asp-for="PackageType" id="PackageType" class="form-control form-control-lg">
+                                        </select>
+                                    </div>
+                                    <input  type="text" style="visibility:hidden" id="customer"  asp-for="CustomerN" />
+
+                                </div>
+
+                                <div class="row  mt-5 mb-5" style="margin-top:0px;">
+                                    <div class="col-12 col-sm-12 ">
+                                        <label style="margin-top: -4px;" class="control-label">Relationship Officer</label>
+                                        <select asp-for="RelationshipOfficer" id="RelationshipOfficer" class="form-control form-control-lg">
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-6 ">
+                                        <label style="margin-top: -4px;" class="control-label">Interest Rate</label>
+                                        <input asp-for="InterestRate" id="Interest" placeholder="Interest Rate" class="form-control form-control-lg" />
+                                    </div>
+                                    <input asp-for="AccountCode" id="AccountCode" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                    <input asp-for="AccountName" id="AccountName" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                    <input asp-for="GlAccNo" id="GlAccNo" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+
+                                    <div class="col-12 col-sm-6 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Deposit Charge Rate</label>
+                                        <input asp-for="DepositCharge" id="Deposit" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                    </div>
+                                </div>
+                                <div class="row mt-4 " style="margin-top:0px;">
+                                    <div class="col-12 col-sm-4 ">
+                                        <label style="margin-top: -4px;" class="control-label">Withdrawer Charge Rate</label>
+                                        <input asp-for="WithdrawerCharge" id="Withdrawer" placeholder="Withdrawer Charge Rate" class="form-control form-control-lg" />
+                                    </div>
+                                    <div class="col-12 col-sm-4 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Opening Charge</label>
+                                        <input asp-for="OpeningCharge" id="OpeningCharge" placeholder="Duration" class="form-control form-control-lg" />
+                                    </div>
+
+                                    <div class="col-12 col-sm-4 mt-4 mt-sm-0 ">
+                                        <label class="control-label">Duration</label>
+                                        <input asp-for="Duration" id="Durations" placeholder="Duration" class="form-control form-control-lg" />
+                                    </div>
+                                </div>
+
+                                <div class="mt-3">
+                                    <input style="width: 100px; background-color: #1aa1e2; border: none; padding: 7px 14px; border-radius: 3px; " class="button submit-btn" type="submit" value="Save" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        jQueryAjaxPostSearch = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success('Successful');
+                            console.log(res.dep);
+                            $('#CustomerName').html('');
+                            var names = res.dep.accountName;
+                            var id = res.dep.customerID;
+                            $('#CustomerName').val(names);
+                            console.log(id);
+                            $('#customer').val(id);
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error("Failed");
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+        jQueryAjaxPostAddAcc = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success(res.msg);
+                            
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error(res.msg);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+    </script>
+<script>
+    $('#CustomerID').blur(function () {
+        var id = $('#CustomerID').val();
+        console.log(id);
+        $('#customer').val(id);
+    });
+
+    $('#PackageType').on("change", function () {
+        var state = $('#PackageType').val();
+        var obj = { Sate_Name: state };
+        console.log(obj);
+        AjaxCall('/Customer/GetDepositePackageItem', JSON.stringify(obj), 'POST').done(function (response) {
+
+            //$('#PackageType').html('');
+            var options1 = '';
+            var options2 = '';
+            var options3 = '';
+            var options4 = '';
+            var options5 = '';
+            var options6 = '';
+            var options7 = '';
+            var options8 = '';
+
+            //for (var i = 0; i < response.length; i++) {
+            console.log(response)
+            options1 = response.item1;
+            options2 = response.item2;
+            options3 = response.item3;
+            options4 = response.item4;
+            options5 = response.item5;
+            options6 = response.item6;
+            options7 = response.item7;
+            options8 = response.item8;
+            // }
+
+
+            $('#Interest').val(options1);
+            $('#Deposit').val(options2);
+            $('#Withdrawer').val(options3);
+            $('#Durations').val(options4 + ' ' + 'Days');
+            $('#AccountCode').val(options5);
+            $('#AccountName').val(options6);
+            $('#GlAccNo').val(options7);
+            $('#OpeningCharge').val(options8);
+
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+    });
+    $('#PackageClass').on("change", function () {
+        var state = $('#PackageClass').val();
+        var obj = { Sate_Name: state };
+        console.log(obj);
+        AjaxCall('/Customer/GetDepositePackage', JSON.stringify(obj), 'POST').done(function (res) {
+            if (res.length > 0) {
+                $('#PackageType').html('');
+                var options = '';
+                options += '<option value="Select">Select</option>';
+                for (var i = 0; i < res.length; i++) {
+                    options += '<option value="' + res[i].code + '">' + res[i].item + '</option>';
+                }
+                $('#PackageType').append(options);
+            }
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+    });
+    $(function () {
+        AjaxCall('/Customer/GetRelationshipOfficer', null).done(function (res) {
+            //   console.log(response);
+            //  var res = JSON.parse(response);
+            if (res.length > 0) {
+                $('#RelationshipOfficer').html('');
+
+                var options = '';
+                options += '<option value="Select">Select</option>';
+
+                for (var i = 0; i < res.length; i++) {
+                    // console.log(res[i].DataCode);
+                    options += '<option value="' + res[i].code + '">' + res[i].item + '</option>';
+                }
+                $('#RelationshipOfficer').append(options);
+
+            }
+        }).fail(function (error) {
+            alert(error.StatusText);
+        });
+    });
+</script>
+  
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

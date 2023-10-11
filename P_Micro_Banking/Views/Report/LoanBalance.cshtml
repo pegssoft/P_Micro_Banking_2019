@@ -1,0 +1,78 @@
+﻿@model P_Micro_Banking.Models.Report.LoanBalanceTotal
+@{
+    ViewData["Title"] = "Newclient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row col-lg-12 float-left mt-3 mb-3">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i>Loan Balance Report
+                </div>
+                <div class="card-body">
+                    <div class="row mt-4">
+                        <table id="LoanBalan" class="table table-responsive-sm table-bordered table-striped table-sm" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>AccountNumber</th>
+                                    <th>AccountHolderName</th>
+                                    <th>AccountName</th>
+                                    <th>Officer</th>
+                                    <th>Paidby</th>
+                                    <th>Tenure</th>
+                                    <th>Totalpaid</th>
+                                    <th>Balance</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.loans)
+                                {
+                                    <tr>
+                                        <td>@item.AccountNumber  </td>
+                                        <td>@item.AccountHolderName  </td>
+                                        <td>@item.AccountName  </td>
+                                        <td>@item.ReletionshipId</td>
+                                        <td>@item.Paidby </td>
+                                        <td>@item.Count</td>
+                                        <td>@item.Totalpaid </td>
+                                        <td>@item.Balance</td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>@Model.Totalpaid </td>
+                                    <td>@Model.Balance</td>
+
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $('#LoanBalance').DataTable();
+        });
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

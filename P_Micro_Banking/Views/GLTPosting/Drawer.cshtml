@@ -1,0 +1,162 @@
+﻿@model IEnumerable<P_Micro_Banking.Models.TrnsPosting.GlOperations>
+@{
+    ViewData["Title"] = "Deposite Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    label {
+        margin-top: 10px;
+        margin-right: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        color: #808080;
+    }
+
+    .displayNames {
+        margin-left: 90px;
+        margin-top: 7px;
+    }
+
+    .displayN {
+        width: 300px;
+        height: 40px;
+        background-color: #eeeef2
+    }
+
+    .names {
+        padding: 10px 13px 10px 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 15px;
+    }
+</style>
+
+<div class="container" style="width:1200px;">
+    <div class="row col-lg-12 float-left mt-3 mb-3">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i> Drawer Balance
+                </div>
+                <div class="card-body">
+                   <div>
+                        <div class="row mt-5">
+                            <table id="DepositeAccount" class="table table-responsive-sm table-bordered table-striped table-sm" cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>DrawerCode</th>
+                                        <th>AccountName</th>
+                                        <th>CurrentDate</th>
+                                        <th>Balance</th>
+                                        <th>Status</th>
+                                        
+
+                                    </tr>
+                                </thead>
+                                <tbody id="TableBody">
+                                    
+                                        @foreach(var item in Model.ToList())
+                                        {
+                                          <tr>
+                                              <td>@item.DrawerCode</td>
+                                              <td>@item.AccountName</td>
+                                              <td>@item.CurrentDate</td>
+                                              <td style="color:green">@item.Balance</td>
+                                              <td>@item.Status</td>
+                                              
+                                          </tr>
+                                        }
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="row">
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        jQueryAjaxPost = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success('Successful');
+                            console.log(res.dep.accDetails);
+                            $('.names').html('');
+                            $('#TableBody').html('');
+                            var names = res.dep.fullNames;
+
+                            var tr = '';
+                            for (var i = 0; i < res.dep.accDetails.length; i++) {
+                                tr += '<tr><td>' + res.dep.accDetails[i].accountCode + '</td><td>' + res.dep.accDetails[i].accountNumber + '</td><td>' + res.dep.accDetails[i].accountName + '</td><td>' + res.dep.accDetails[i].packageClass + '</td><td>' + res.dep.accDetails[i].packageType + '</td><td>' + res.dep.accDetails[i].status + '</td><td><a asp-action="ListIncident" class="btn" asp-route-id="' + res.dep.accDetails[i].accountNumber + '">History</a></td></tr>'
+
+                            }
+                            $('#TableBody').append(tr);
+                            $('.names').append(names);
+
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error("Failed");
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+    </script>
+    <script>
+        var modal = document.getElementById("myModal");
+        var span = document.getElementsByClassName("closes")[0];
+
+        span.onclick = function () {
+            $("#myModal .modal-body").html('');
+            $("#myModal .modal-title").html('');
+            modal.style.display = "none";
+
+        }
+    </script>
+    <script>
+        showinpopupi = (url, title) => {
+            var modal = document.getElementById("myModal");
+            $.ajax({
+                async: true,
+                type: "GET",
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (res) {
+                    $("#myModal .modal-body").html(res);
+                    $("#myModal .modal-title").html(title);
+                    modal.style.display = "block";
+                }
+            });
+        }
+
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

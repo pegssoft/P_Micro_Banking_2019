@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContetAccessor
+
+<header class="app-header navbar">
+    <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/#">
+        <img class="navbar-brand-full" src="/img/JoyZone.jpeg" width="89" height="25" alt="CoreUI Logo">
+        <img class="navbar-brand-minimized" src="/img/JoyZone.jpeg" width="30" height="30" alt="CoreUI Logo">
+    </a>
+    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <ul class="nav navbar-nav d-md-down-none">
+        <li class="nav-item px-3">
+            <a class="nav-link" href="/#">Dashboard</a>
+        </li>
+        <li class="nav-item px-3">
+            <a class="nav-link" href="/#">Users</a>
+        </li>
+        <li class="nav-item px-3">
+            <a class="nav-link" href="/#">Settings</a>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link nav-link" data-toggle="dropdown" href="/#" role="button" aria-haspopup="true" aria-expanded="false">
+                <img class="img-avatar" src="/img/avatars/6.jpg" alt="admin@bootstrapmaster.com">
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-item">
+                    <i class="icon-user-follow text-success"></i>@HttpContetAccessor.HttpContext.Session.GetString("_FirstName")&nbsp;@HttpContetAccessor.HttpContext.Session.GetString("_LastName")
+                </div>
+                <a class="dropdown-item" href="/#">
+                    <i class="fa fa-user"></i> Profile
+                </a>
+                <a class="dropdown-item" href="/#">
+                    <i class="fa fa-wrench"></i> Settings
+                </a>
+
+                <div class="dropdown-divider"></div>
+                <form asp-action="logout" method="post">
+                    <a class="dropdown-item" href="/#">
+                        <table>
+                            <tr>
+                                <td><i class="fa fa-lock"></i></td>
+                                <td><input class="nav-link" value="Logout" type="submit" /></td>
+                            </tr>
+                        </table>
+                         
+                    </a>
+                </form>
+            </div>
+        </li>
+    </ul>
+
+    <div style="margin-left:10px"></div>
+
+</header>

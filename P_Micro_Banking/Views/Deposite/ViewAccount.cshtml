@@ -1,0 +1,213 @@
+﻿@model P_Micro_Banking.Models.Deposite.AccountTransaction
+@{ ViewData["Title"] = "View Account";
+    Layout = "_Layout1";
+}
+
+<style>
+    label {
+        margin-top: 10px;
+        margin-right: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        color: #808080;
+    }
+
+    .displayNames {
+        margin-left: 90px;
+        margin-top: 7px;
+    }
+
+    .displayN {
+        width: 300px;
+        height: 40px;
+        background-color: #eeeef2
+    }
+
+    .names {
+        padding: 10px 13px 10px 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 15px;
+    }
+
+    .card1 {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        /* border: 1px solid #c8ced3; */
+        border-radius: 0.25rem;
+    }
+    span{
+        margin-top:10px;
+        font-weight:bold;
+
+    }
+</style>
+
+<div class="container" style="width:1200px;">
+    <div class="row col-lg-12 float-left mt-3 mb-3">
+        <div class="col-lg-12">
+
+            <div class="card1">
+
+                <div class="card-body">
+                    <div class="row" style="margin:5px;">
+                        <form asp-controller="Deposite" onsubmit="return jQueryAjaxPostAccount(this);" enctype="multipart/form-data" method="POST" asp-action="ViewAccount">
+                            <div class="input-group">
+                                <label class="">AccountNumber</label>
+                                <input required type="search" class="form-control rounded" placeholder="Account Number" asp-for="AccountNumber" style="width: 300px;" /> &nbsp;&nbsp;
+
+
+                                <input style="width: 100px;" class="button submit-btn" type="submit" value="Search" />
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="row">
+                        <div class="displayNames col-sm-6">
+                            <div class="displayN"><span class="namess">@*@Model.FullNames*@</span></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group mt-4 mb-4 ">
+                            <label class="label">Current Balance</label>
+                            <div class="col-12 col-sm-7"><span class="mt-3 Balance"></span></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group mt-0 mb-2 ">
+                            <label class="label">Avail Withdrawer</label>
+                            <div class="col-12 col-sm-7"><span class="mt-3 Withdrawer"></span></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="row mt-5">
+                            <table id="DepositeAccount" class="table table-responsive-sm table-bordered table-striped table-sm" cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>TransReference</th>
+                                        <th>TransDiscription</th>
+                                        <th>TransCode</th>
+                                        <th>TransNaration</th>
+                                        <th>TransDate</th>
+                                        <th>Cr_Dr</th>
+                                        <th>Amount</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="TableBodys">
+                                    @*
+                        @foreach(var item in Model.accDetails.ToList())
+                        {
+                          <tr>
+                              <td>@item.AccountCode</td>
+                              <td>@item.AccountNumber</td>
+                              <td>@item.AccountName</td>
+                              <td>@item.PackageClass</td>
+                              <td>@item.PackageType</td>
+                              <td>@item.Balance</td>
+                              <td>
+                                  <a onclick="showinpopupH('@Url.Action("DashboardItemFive","Home", new {id = @item.AccountNumber })','HISTORY')" class="btn px-4" style="background-color: #1d9bc6;color:white;">View History</a>
+                              </td>
+                          </tr>
+                        }*@
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        jQueryAjaxPostAccount = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success('Successful');
+                            console.log(res);
+                            $('.namess').html('');
+                            $('.Balance').html('');
+                            $('.Withdrawer').html('');
+                            $('#TableBodys').html('');
+
+                            var names = res.dep.fullNames;
+                            var bal = res.dep.currentBalance;
+                            var GetFormattedVal = parseFloat(bal.replace(/[&\/\\#,+()$~%₦' ''":*?<>{}]/g, ''));
+                            var charge = res.dep.charge;
+
+                            var decimal = (charge / 100)
+                            var Interest = (decimal * GetFormattedVal);
+                            var total = parseFloat(GetFormattedVal - Interest).formatMoney();
+                            console.log(charge, total, Interest, decimal)
+                            var tr = '';
+                            for (var i = 0; i < res.dep.history.length; i++) {
+
+                                if (res.dep.history[i].cr_Dr == "Cr") {
+                                    tr += '<tr><td>' + res.dep.history[i].transReference + '</td><td>' + res.dep.history[i].transDiscription + '</td><td>' + res.dep.history[i].transCode + '</td><td>' + res.dep.history[i].transNaration + '</td><td>' + res.dep.history[i].transDate + '</td><td>' + res.dep.history[i].cr_Dr + '</td><td style="color:green;">' + res.dep.history[i].amount + '</td><td style="color:green;">' + res.dep.history[i].balance + '</td></tr>'
+                                }
+                                else {
+                                    tr += '<tr><td>' + res.dep.history[i].transReference + '</td><td>' + res.dep.history[i].transDiscription + '</td><td>' + res.dep.history[i].transCode + '</td><td>' + res.dep.history[i].transNaration + '</td><td>' + res.dep.history[i].transDate + '</td><td>' + res.dep.history[i].cr_Dr + '</td><td style="color:Red;">' + res.dep.history[i].amount + '</td><td style="color:green;">' + res.dep.history[i].balance + '</td></tr>'
+                                }
+                            }
+                           
+                            $('.namess').append(names);
+                            $('.Balance').append(bal);
+                            $('.Withdrawer').append(total);
+                            $('#TableBodys').append(tr);
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error("Failed");
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+
+        Number.prototype.formatMoney = function (decPlaces, thouSeparator, decSeparator) {
+            var n = this,
+                decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+                decSeparator = decSeparator == undefined ? "." : decSeparator,
+                thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+                sign = n < 0 ? "-" : "",
+                i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
+        };
+
+    </script>
+
+
+
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

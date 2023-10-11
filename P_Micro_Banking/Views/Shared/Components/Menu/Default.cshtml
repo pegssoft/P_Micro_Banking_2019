@@ -1,0 +1,63 @@
+﻿@using P_Micro_Banking.Models
+@model List<P_Micro_Banking.Models.Menu.MenuViewModel>
+@{
+    ViewData["Title"] = "NavigationMenu";
+}
+
+
+<div class="sidebar">
+    <nav class="sidebar-nav">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/Home/index">
+                    <i class="nav-icon icon-speedometer"></i> Dashboard
+                    <span class="badge badge-primary">NEW</span>
+                </a>
+            </li>
+            <li class="nav-title">Components</li>
+            @foreach (var nav in Model)
+            {
+                <li class="@nav.ListClass">
+                    <a class="@nav.aClass" href="@nav.Url">
+                        <i class="@nav.IconClass"></i> @nav.MenuNames
+                    </a>
+                    @if (nav.Paths == "nothing")
+                    {
+
+                    }
+                    else
+                    {
+                        var children = nav.Children.Where(x => x.Menu_ID == nav.ID).ToList();
+                        <ul class="nav-dropdown-items">
+                            @foreach (var navc in children)
+                            {
+                                <li class="@navc.ListClass">
+                                    <a class="@navc.aClass" href="/@navc.Paths/@navc.Url">
+                                        <i class="@navc.IconClass"></i> @navc.MenuNames
+                                    </a>
+                                </li>
+                            }
+
+
+                        </ul>
+                    }
+
+                </li>
+            }
+
+
+            @*<li class="nav-item mt-auto">
+            <a class="nav-link nav-link-success" href="https://coreui.io" target="_top">
+                <i class="nav-icon icon-cloud-download"></i> Download CoreUI
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link nav-link-danger" href="https://coreui.io/pro/" target="_top">
+                <i class="nav-icon icon-layers"></i> Try CoreUI
+                <strong>PRO</strong>
+            </a>
+        </li>*@
+        </ul>
+    </nav>
+    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+</div>

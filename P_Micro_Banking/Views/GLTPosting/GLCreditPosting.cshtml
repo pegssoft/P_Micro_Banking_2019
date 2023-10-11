@@ -1,0 +1,268 @@
+﻿
+@model P_Micro_Banking.Models.TrnsPosting.GLTransPosting
+
+@{ ViewData["Title"] = "GL Credit Posting";
+    Layout = "_Layout";
+}
+
+<style>
+    .label {
+        margin-top: 10px;
+        margin-right: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        color: #808080;
+    }
+
+    .card1 {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        /* border: 1px solid #c8ced3; */
+        border-radius: 0.25rem;
+    }
+
+    .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+    }
+
+    #Amount {
+    }
+</style>
+
+
+
+
+<div class="container">
+    <div class="row col-lg-12">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i> GL Credit Posting
+                </div>
+                <div class="card-body">
+                    <div class="center">
+                        <div class="col-lg-12" style="margin:5px;">
+                            <form asp-controller="GLTPosting" onsubmit="return jQueryAjaxPostGLCredit(this);" enctype="multipart/form-data" method="POST" asp-action="GLCreditPosting">
+                                <div class="col-lg-12">
+                                    <div class="row mt-4 mb-4">
+                                        <label class="col-sm-3 label">From: Account </label>
+                                        <div class="col-sm-6">
+                                            <select required class="form-control rounded form-control-lg " id="Teller" asp-for="Teller">
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row mt-4 mb-4">
+                                        <label class="col-sm-3 label">To: Account</label>
+                                        <div class="col-sm-6">
+                                            <select required class="form-control rounded form-control-lg " id="ToAccount" asp-for="ToAccount">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="col-sm-3 ">Amount</label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control form-control-lg" data-type="currency" id="Amount" type="text" placeholder="0.00">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-2">
+                                        <label class="col-sm-3 ">Rate</label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control form-control-lg" id="Rate" value="1NGN" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="row  mt-2">
+                                        <label class="col-sm-3 ">Currency</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control form-control-lg">
+                                                <option selected value="1">NGN</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row  mt-2">
+                                        <label class="col-sm-3 ">Total</label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control form-control-lg" id="Total" type="text" placeholder="0.00">
+                                        </div>
+                                    </div>
+                                    <div class="row  mt-2">
+                                        <label class="col-sm-3 ">Naration</label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control form-control-lg" asp-for="Naration" id="Naration" type="text" value="101- GL Credit Posting" placeholder="Naration">
+                                        </div>
+                                    </div>
+
+                                    <input asp-for="Amount" id="numb" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+
+
+                                    <div class="mt-3">
+                                        <input style="width: 100px; background-color: #1aa1e2; border: none; padding: 7px 14px; border-radius: 3px; " class="button submit-btn" type="submit" value="Post" />
+                                    </div>
+                                </div>
+                             </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        jQueryAjaxPostGLCredit = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success(res.msg);
+
+                            $("#Amount").val('');
+                            $("#Amount").attr('placeholder', '0.00');
+                            $('#Total').val('');
+                            $('#Total').attr('placeholder', '0.00');
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error(res.msg);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+    </script>
+    <script>
+        $('#CustomerID').blur(function () {
+            var id = $('#CustomerID').val();
+            console.log(id);
+            $('#customer').val(id);
+        });
+
+       
+
+        document.getElementById("Amount").onchange = function () {
+            var amt = parseInt(document.getElementById("Amount").value);
+            document.getElementById("numb").value = amt;
+
+        }
+
+        // Jquery Dependency
+        $("input[data-type='currency']").on({
+            blur: function () {
+                var LoanAmount = document.getElementById("numb").value;
+                document.getElementById("Amount").value = parseFloat(LoanAmount).formatMoney();
+
+                var amount = $('#numb').val();
+               
+                var total = parseFloat(amount * 1).formatMoney() ;
+                $('#Total').val(total.toLocaleString());
+
+            }
+        });
+
+        Number.prototype.formatMoney = function (decPlaces, thouSeparator, decSeparator) {
+            var n = this,
+                decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+                decSeparator = decSeparator == undefined ? "." : decSeparator,
+                thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+                sign = n < 0 ? "-" : "",
+                i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
+        };
+
+        $(function () {
+            AjaxCall('/GLTPosting/GetTeller', null).done(function (res) {
+                //   console.log(response);
+                //  var res = JSON.parse(response);
+                if (res.length > 0) {
+                    $('#Teller').html('');
+
+                    var options = '';
+                    //options += '<option value="Select">Select</option>';
+
+                    for (var i = 0; i < res.length; i++) {
+                        // console.log(res[i].DataCode);
+                        options += '<option value="' + res[i].code + '">' + res[i].item + '</option>';
+                    }
+                    $('#Teller').append(options);
+
+                }
+            }).fail(function (error) {
+                alert(error.StatusText);
+            });
+        });
+
+        $(function () {
+            AjaxCall('/GLTPosting/GetToAccount', null).done(function (res) {
+                //   console.log(response);
+                //  var res = JSON.parse(response);
+                if (res.length > 0) {
+                    $('#ToAccount').html('');
+
+                    var options = '';
+                    options += '<option value="Select">Select</option>';
+
+                    for (var i = 0; i < res.length; i++) {
+                        // console.log(res[i].DataCode);
+                        options += '<option value="' + res[i].code + '">' + res[i].item + '</option>';
+                    }
+                    $('#ToAccount').append(options);
+
+                }
+            }).fail(function (error) {
+                alert(error.StatusText);
+            });
+        });
+        function AjaxCall(url, data, type) {
+            return $.ajax({
+                url: url,
+                data: data,
+                dataType: 'json',
+                type: type ? type : 'GET',
+                contentType: "application/json; charset=utf-8"
+            });
+        }
+
+    </script>
+
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+

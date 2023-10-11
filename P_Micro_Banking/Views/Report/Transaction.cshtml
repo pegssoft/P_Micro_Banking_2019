@@ -1,0 +1,229 @@
+﻿@model P_Micro_Banking.Models.Report.Transction
+@{
+    ViewData["Title"] = "Transaction Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    label {
+        margin-top: 10px;
+        margin-right: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        color: #808080;
+    }
+
+    .displayNames {
+        margin-left: 90px;
+        margin-top: 7px;
+    }
+
+    .displayN {
+        width: 300px;
+        height: 40px;
+        background-color: #eeeef2
+    }
+
+    .names {
+        padding: 10px 13px 10px 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 15px;
+    }
+</style>
+
+<div class="container">
+    <div class="row col-lg-12 float-left mt-3 mb-3">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i>Search
+                </div>
+                <div class="card-body">
+                    <div class="row" style="margin:5px;">
+                        <form asp-controller="Report" asp-action="Transaction" method="post">
+                            <div class="input-group">
+                                <input required type="date" class="form-control rounded" placeholder="Search" name="StartDate" aria-label="Search"
+                                       aria-describedby="search-addon" style="width: 300px;" /> &nbsp;&nbsp;
+                                <input required type="date" class="form-control rounded" placeholder="Search" name="EndDate" aria-label="Search"
+                                       aria-describedby="search-addon" style="width: 300px;" />
+                                &nbsp;&nbsp;
+                                <input style="width: 100px;" class="btn btn-outline-success" type="submit" value="Search" />
+                            </div>
+
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="container" style="width:1200px;">
+    <div class="row col-lg-12 float-left mt-3 mb-3">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i> Loan Repayment
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="row mt-5">
+                            <table id="DepositeAccount" class="table table-responsive-sm table-bordered table-striped table-sm" cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Account Nunber</th>
+                                        <th>Officer</th>
+                                        <th>Amount</th>
+                                        
+
+                                    </tr>
+                                </thead>
+                                <tbody id="TableBody">
+
+                                    @foreach (var item in Model.repayments.ToList())
+                                    {
+                                        <tr>
+                                            <td>@item.AccountNumber</td>
+                                            <td>@item.ReletionshipId</td>
+                                            <td>@item.Amount</td>
+                                            
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="font-weight:bold">@Model.RepaymentTotal</td>
+                                        
+                                </tfoot>
+                            </table>
+
+                        </div>
+                        <div class="row">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="width:1200px;">
+    <div class="row col-lg-12 float-left mt-3 mb-3">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i> Deposit
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="row mt-5">
+                            <table id="DepositeAccount" class="table table-responsive-sm table-bordered table-striped table-sm" cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Account Nunber</th>
+                                        <th>Officer</th>
+                                        <th>Amount</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody id="TableBody">
+
+                                    @foreach (var item in Model.deposite.ToList())
+                                    {
+                                        <tr>
+                                            <td>@item.AccountNumber</td>
+                                            <td>@item.ReletionshipId</td>
+                                            <td>@item.Amount</td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="font-weight:bold">@Model.DepositeTotal</td>
+
+                                </tfoot>
+                            </table>
+
+                        </div>
+                        <div class="row">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="width:1200px;">
+    <div class="row col-lg-12 float-left mt-3 mb-3">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i> Withdrawer
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="row mt-5">
+                            <table id="DepositeAccount" class="table table-responsive-sm table-bordered table-striped table-sm" cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Account Nunber</th>
+                                        <th>Officer</th>
+                                        <th>Amount</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody id="TableBody">
+
+                                    @foreach (var item in Model.widthdrawer.ToList())
+                                    {
+                                        <tr>
+                                            <td>@item.AccountNumber</td>
+                                            <td>@item.ReletionshipId</td>
+                                            <td>@item.Amount</td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="font-weight:bold">@Model.WidthdrawerTotal</td>
+
+                                </tfoot>
+                            </table>
+
+                        </div>
+                        <div class="row">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

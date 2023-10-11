@@ -1,0 +1,305 @@
+﻿
+@model P_Micro_Banking.Models.Deposite.TransactionSearch
+
+@{ ViewData["Title"] = "Cash Withdrawer";
+    Layout = "_Layout";
+}
+
+<style>
+    .label {
+        margin-top: 10px;
+        margin-right: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        color: #808080;
+    }
+
+    .card1 {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        /* border: 1px solid #c8ced3; */
+        border-radius: 0.25rem;
+    }
+
+    .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+    }
+
+    #Amount {
+    }
+</style>
+
+
+
+
+<div class="container">
+    <div class="row col-lg-12">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i> Cash Withdrawer
+                </div>
+                <div class="card-body">
+                    <div class="center">
+                        <div class="row col-lg-12" style="margin:5px;">
+                            <form asp-controller="Deposite" onsubmit="return jQueryAjaxGetAccountDeposit(this);" enctype="multipart/form-data" method="POST" asp-action="SingleAccTransName">
+                                <div class="input-group">
+                                    <label class="label">Account Number</label>
+                                    <input required type="text" class="form-control rounded form-control-lg" id="AccountNumber" placeholder="Account Number" asp-for="AccountNumber" style="width: 300px;" /> &nbsp;&nbsp;
+
+
+                                    <input style="width: 100px; background-color: #1aa1e2; border: none; border-radius: 3px; " class="button submit-btn" type="submit" value="Search" />
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class=" col-lg-12">
+                            <form asp-controller="Deposite" onsubmit="return jQueryAjaxPostCashWithdrawer(this);" enctype="multipart/form-data" method="POST" asp-action="CashWithdrawer">
+                                <div class="row" style="margin-top:0px;">
+                                    <div class="input-group mt-4 mb-4 ">
+                                        <label class="label">Account Name</label>
+                                        <div class="col-12 col-sm-7"> <input asp-for="AccountHolderName" id="AccountHolderName" placeholder="Account Name" class="form-control form-control-lg" /></div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 " for="hf-email">Amount</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg" data-type="currency" id="Amount" type="text" placeholder="0.00">
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 " asp-for="WChargeRate">Withdrawer Charge</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg" id="WithdrawerCharge" type="text" placeholder="0.00">
+                                        <input class="form-control form-control-lg" asp-for="WChargeRate" id="wdtchg" type="hidden" placeholder="0.00">
+
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 ">Rate</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg" id="Rate" value="1NGN" type="text">
+                                    </div>
+                                </div>
+                                <div class="row  mt-2">
+                                    <label class="col-sm-3 ">Currency</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control form-control-lg">
+                                            <option selected value="1">NGN</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row  mt-2">
+                                    <label class="col-sm-3 ">Total</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg" id="Total" type="text" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="row  mt-2">
+                                    <label class="col-sm-3 ">Naration</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg" asp-for="Naration" id="Naration" type="text" value="103-Cash Withdrawer" placeholder="Naration">
+                                    </div>
+                                </div>
+                                <div class="row  mt-2">
+                                    <label class="col-sm-3 ">SMS</label>
+                                    <div class="col-sm-6 ml-4">
+                                        <input class="form-check-input" asp-for="SMS" id="SMS" type="checkbox" />
+                                    </div>
+                                </div>
+
+                                <input asp-for="AccountCode" id="AccountCode" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                <input asp-for="AccountName" id="AccountName" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                <input asp-for="GLAccount" id="GlAccNo" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+
+                                <input asp-for="Amount" id="numb" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                <input asp-for="AccountNumber1" id="AccountNumber1" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                <input asp-for="PhoneNumber" id="PhoneNumber" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+
+
+
+                                <div class="mt-3">
+                                    <input style="width: 100px; background-color: #1aa1e2; border: none; padding: 7px 14px; border-radius: 3px; " class="button submit-btn" type="submit" value="Post" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        jQueryAjaxGetAccountDeposit = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success('Successful');
+                            console.log(res.dep);
+                            $('#AccountHolderName').html('');
+                            $('#WithdrawerCharge').html('');
+                            $('#AccountCode').html('');
+                            $('#GlAccNo').html('');
+                            $('#AccountNumber1').html('');
+                            $('#PhoneNumber').html('');
+
+                            var AccountHolderName = res.dep.accountHolderName;
+                            var WithdrawerCharge = res.dep.wChargeRate;
+                            var AccountCode = res.dep.accountCode;
+                            var GLAccount = res.dep.glAccount;
+                            var AccountNumber1 = res.dep.accountNumber1;
+                            var PhoneNumber = res.dep.phoneNumber
+
+                            $('#AccountHolderName').val(AccountHolderName);
+                            $('#WithdrawerCharge').val(WithdrawerCharge);
+                            $('#AccountCode').val(AccountCode);
+                            $('#GlAccNo').val(GLAccount);
+                            $('#AccountNumber1').val(AccountNumber1);
+                            $('#PhoneNumber').val(PhoneNumber);
+
+                            $("#Amount").prop("disabled", false);
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error("Failed");
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+        jQueryAjaxPostCashWithdrawer = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success(res.msg);
+
+                            $("#Amount").val('');
+                            $("#Amount").attr('placeholder', '0.00');
+                            $("#Amount").prop("disabled", true);
+                            $('#AccountHolderName').val('');
+                            $('#WithdrawerCharge').val('');
+                            $('#WithdrawerCharge').attr('placeholder', '0.00');
+                            $('#AccountCode').val('');
+                            $('#GlAccNo').val('');
+                            $('#AccountNumber1').val('');
+                            $('#Total').val('');
+                            $('#Total').attr('placeholder', '0.00');
+                            $("#SMS").prop("checked", false);
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error(res.msg);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+    </script>
+    <script>
+        $('#CustomerID').blur(function () {
+            var id = $('#CustomerID').val();
+            console.log(id);
+            $('#customer').val(id);
+        });
+
+        $(document).ready(function () {
+            $("#Amount").prop("disabled", true);
+        });
+
+        document.getElementById("Amount").onchange = function () {
+            var amt = parseInt(document.getElementById("Amount").value);
+            document.getElementById("numb").value = amt;
+
+        }
+
+        // Jquery Dependency
+        $("input[data-type='currency']").on({
+            blur: function () {
+                var LoanAmount = document.getElementById("numb").value;
+                document.getElementById("Amount").value = parseFloat(LoanAmount).formatMoney();
+
+                var amount = $('#numb').val();
+                var charge = $('#WithdrawerCharge').val();
+
+                var decimal = (charge / 100)
+                var Interest = (decimal * amount);
+                var total = parseFloat(amount - Interest).formatMoney() ;
+
+                $('#wdtchg').val(Interest);
+                $('#Total').val(total.toLocaleString());
+
+            }
+        });
+
+        Number.prototype.formatMoney = function (decPlaces, thouSeparator, decSeparator) {
+            var n = this,
+                decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+                decSeparator = decSeparator == undefined ? "." : decSeparator,
+                thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+                sign = n < 0 ? "-" : "",
+                i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
+        };
+
+
+    </script>
+
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+

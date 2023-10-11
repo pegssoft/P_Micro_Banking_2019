@@ -1,0 +1,139 @@
+﻿@model P_Micro_Banking.Models.Report.ReportUtility
+@{
+    ViewData["Title"] = "TrailBalance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    label {
+        margin-top: 10px;
+        margin-right: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        color: #808080;
+    }
+
+    .displayNames {
+        margin-left: 90px;
+        margin-top: 7px;
+    }
+
+    .displayN {
+        width: 300px;
+        height: 40px;
+        background-color: #eeeef2
+    }
+
+    .names {
+        padding: 10px 13px 10px 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 15px;
+    }
+</style>
+
+<div class="container" style="width:1200px;">
+    <div class="row col-lg-12 float-left mt-3 mb-3">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i> TrailBalance:- Income
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="row mt-5">
+                            <table id="DepositeAccount" class="table table-responsive-sm table-bordered table-striped table-sm" cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Account Nunber</th>
+                                        <th>Account Name</th>
+                                        <th>Opening</th>
+                                        <th>Credit</th>
+                                        <th>Debit</th>
+                                        <th>Closing</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="TableBody">
+
+                                    @foreach (var item in Model.Incomes.ToList())
+                                    {
+                                    <tr>
+                                        <td>@item.AccountNumber</td>
+                                        <td>@item.AccountName</td>
+                                        <td>@item.Opening</td>
+                                        <td>@item.Credit</td>
+                                        <td>@item.Debit</td>
+                                        <td>@item.Closing</td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="row">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="width:1200px;">
+    <div class="row col-lg-12 float-left mt-3 mb-3">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i> TrailBalance:- Liability
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="row mt-5">
+                            <table id="DepositeAccount" class="table table-responsive-sm table-bordered table-striped table-sm" cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Account Nunber</th>
+                                        <th>Account Name</th>
+                                        <th>Opening</th>
+                                        <th>Credit</th>
+                                        <th>Debit</th>
+                                        <th>Closing</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="TableBody">
+
+                                    @foreach (var item in Model.Liabilitys.ToList())
+                                    {
+                                    <tr>
+                                        <td>@item.AccountNumber</td>
+                                        <td>@item.AccountName</td>
+                                        <td>@item.Opening</td>
+                                        <td>@item.Credit</td>
+                                        <td>@item.Debit</td>
+                                        <td>@item.Closing</td>
+
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="row">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

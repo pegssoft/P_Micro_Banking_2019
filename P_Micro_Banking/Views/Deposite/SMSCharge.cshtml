@@ -1,0 +1,181 @@
+﻿
+@model P_Micro_Banking.Models.Deposite.smsCharge
+
+@{ ViewData["Title"] = "Sms Charge";
+    Layout = "_Layout";
+}
+
+<style>
+    .label {
+        margin-top: 10px;
+        margin-right: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        color: #808080;
+    }
+
+    .card1 {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        /* border: 1px solid #c8ced3; */
+        border-radius: 0.25rem;
+    }
+
+    .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+    }
+
+    #Amount {
+    }
+</style>
+
+
+
+
+<div class="container">
+    <div class="row col-lg-12">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-edit"></i> Sms Charge
+                </div>
+                <div class="card-body">
+                    <div class="center">
+                        <div class=" col-lg-12">
+                            <form asp-controller="Deposite" onsubmit="return jQueryAjaxPostSmsCharge(this);" enctype="multipart/form-data" method="POST" asp-action="SMSCharge">
+                               
+
+                                <div class="row mt-2">
+                                    <label class="col-sm-3 " for="hf-email">Charge Amount</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg" data-type="currency" id="Amount" type="text" placeholder="0.00">
+                                    </div>
+                                </div>
+
+                                
+                                <div class="row  mt-2">
+                                    <label class="col-sm-3 ">Naration</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-lg" asp-for="Naration" id="Naration" type="text" value="116-Sms Charge" placeholder="Naration">
+                                    </div>
+                                </div>
+
+                                <div class="row  mt-2">
+                                    <label class="col-sm-3 ">SMS</label>
+                                    <div class="col-sm-6 ml-4">
+                                        <input class="form-check-input" asp-for="SMS" id="SMS" type="checkbox" />
+                                    </div>
+                                </div>
+
+                                
+                                <input asp-for="Amount" id="numb" type="hidden" placeholder="Deposit Charge Rate" class="form-control form-control-lg" />
+                                
+
+
+                                <div class="mt-3">
+                                    <input style="width: 100px; background-color: #1aa1e2; border: none; padding: 7px 14px; border-radius: 3px; " class="button submit-btn" type="submit" value="Post" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        jQueryAjaxPostSmsCharge = form => {
+            displayBusyIndicator();
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            displayBusyIndicatorstop();
+                            toastr.clear();
+                            toastr.success(res.msg);
+
+                            $("#Amount").val('');
+                            $("#Amount").attr('placeholder', '0.00');
+                         
+                            $("#SMS").prop("checked", false);
+                        }
+                        else {
+                            displayBusyIndicatorstop();
+                            toastr.error(res.msg);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+            }
+
+            //prevent default post event
+            return false;
+        }
+    </script>
+    <script>
+       
+        document.getElementById("Amount").onchange = function () {
+            var amt = parseInt(document.getElementById("Amount").value);
+            document.getElementById("numb").value = amt;
+
+        }
+
+        // Jquery Dependency
+        $("input[data-type='currency']").on({
+            blur: function () {
+                var LoanAmount = document.getElementById("numb").value;
+                document.getElementById("Amount").value = parseFloat(LoanAmount).formatMoney();
+
+                var amount = $('#numb').val();
+                var charge = $('#DepositeCharge').val();
+                var total = parseFloat(amount - charge).formatMoney() ;
+                $('#Total').val(total.toLocaleString());
+
+            }
+        });
+
+        Number.prototype.formatMoney = function (decPlaces, thouSeparator, decSeparator) {
+            var n = this,
+                decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+                decSeparator = decSeparator == undefined ? "." : decSeparator,
+                thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+                sign = n < 0 ? "-" : "",
+                i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
+        };
+
+
+    </script>
+
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+
